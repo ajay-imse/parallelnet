@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import torch, time, os
 
@@ -15,7 +14,6 @@ lens = 0.25
 thresh = 0.3
 decay = 0.3
 
-#fileloc = '/home/neuro-intel-linux/Documents/yjwu_nmnist'
 
 num_classes = 10
 batch_size = 1
@@ -104,19 +102,12 @@ class SNN_Model(nn.Module):
         c1_mem = c1_spike = torch.zeros( 50, 32, 32, device=device)
         p1_mem = p1_spike = torch.zeros( 50, 16, 16, device=device)
 
-        #c2_mem = c2_spike = torch.zeros(bsize, cfg_cnn[2][1], 7, 7, device=device)
-        #p2_mem = p2_spike = torch.zeros(bsize, cfg_cnn[2][1], 7, 7, device=device)
-
         h1_mem = h1_spike = h1_sumspike = torch.zeros( 200, device=device)
         h2_mem = h2_spike = h2_sumspike = torch.zeros( 10, device=device)
 
         x=torch.zeros(input.size()).float()
 
-        #firstspikesidx=torch.zeros(batch_size,5)
-        #spkcnt=torch.zeros(batch_size).byte()
-        #input = input.float()
         for step in range(win):
-            #x = input[:, :, :, :, step]
             x = input[:, :, step]
             x=x[:,:,None,None]
             x=x.permute(2,3,0,1)
@@ -127,16 +118,11 @@ class SNN_Model(nn.Module):
             c1_mem, c1_spike = mem_update(self.conv1, p0_spike, c1_mem, c1_spike,decay,step)
             p1_mem, p1_spike = mem_update_pool(F.avg_pool2d, c1_spike, p1_mem, p1_spike,decay,step)
 
-            #c2_mem, c2_spike = mem_update(self.conv2, p1_spike, c2_mem, c2_spike,decay,step)
-            #p2_mem, p2_spike = mem_update_pool(F.avg_pool2d, c2_spike, p2_mem, p2_spike,decay,step)
-
-            #x = c2_spike.view(bsize, -1)
             x = p1_spike.view( -1)
 
             h1_mem, h1_spike = mem_update(self.fc1, x, h1_mem, h1_spike,decay,step)
             h1_sumspike += h1_spike
 
-            #h2_mem = mem_update_last(self.fc2, h1_spike, h2_mem,decay,step)
             h2_mem, h2_spike = mem_update(self.fc2, h1_spike, h2_mem, h2_spike,decay,step)
             h2_sumspike += h2_spike
   
@@ -192,9 +178,7 @@ for epoch in range(num_epochs):
     shortiter=numiters
 
     for i in range(shortiter):
-        #images = tr_images[i,:,:,:,:,:]
         images = tr_images[:,:,:,i]
-        #images = images[:,:,:,None,None]
         #images.permute(2,3,0,1)
 
 
@@ -203,7 +187,6 @@ for epoch in range(num_epochs):
         #print('\n','iteration num',i,'\n')
         snn.zero_grad()
         optimizer.zero_grad()
-        #print(images[0,0,:,:])
         images = images.float().to(device)
         outputs = snn(images, time_window,1)
         ops = outputs.cpu()
@@ -243,22 +226,8 @@ for epoch in range(num_epochs):
         
         _,preds[i]=torch.max(outputs.data,0)
 
-        #_, predicted = torch.max(outputs.data, 0)
-        #_, lbls = torch.max(lbls.data, 0)
-        #total += lbls.size(0)
-        #correct += (predicted.cpu() == lbls).sum()
-        #correct += (predicted.cpu() == tr_labels).sum()
-        #print(correct,total)
-
-
-        #i +=1
     ct = (preds[0:shortiter]==tr_labels[0:shortiter])
-    #print(preds[0:shortiter])
     print('\n\n\n')
-    #print(tr_labels[0:shortiter])
-    #print('\n\n\n')
-    #print(preds.shape,tr_labels.shape)
-    #print(ct.shape)
     print('Iters:', epoch, '\n')
     correct=ct.sum()
     print(correct)

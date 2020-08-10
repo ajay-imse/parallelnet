@@ -1,5 +1,5 @@
 # parallelnet
---------------
+
 folder purdue:
 Based on arXiv:1903.06379, Enabling spike based backprop in deep NN architectures.
 

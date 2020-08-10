@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 import torch, time, os
 
@@ -14,8 +13,6 @@ lens = 0.25
 
 thresh = 0.3
 decay = 0.3
-
-#fileloc = '/home/neuro-intel-linux/Documents/yjwu_nmnist'
 
 num_classes = 10
 batch_size = 1

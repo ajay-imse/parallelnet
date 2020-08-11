@@ -36,8 +36,8 @@ acc3=sum(k3labels_ts==k3preds)./3.05;
 conf3=confusionmat(uint8(k3preds)+1,uint8(k3labels_ts)+1);
 
 
-meanacc=mean([acc0+acc1+acc2+acc3])
-stdacc=std([acc0+acc1+acc2+acc3])
+meanacc=mean([acc0,acc1,acc2,acc3])
+stdacc=std([acc0,acc1,acc2,acc3])
 confall=(conf0+conf1+conf2+conf3)
 
 confusionchart(confall,labelnames)

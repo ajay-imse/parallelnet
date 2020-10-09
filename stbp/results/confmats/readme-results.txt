@@ -13,7 +13,7 @@ network with delay
 learning as is
 i.e. part of network output is buffered to next input
 5 ms delay - accuracy 91.12%
-10 ms delay - accuracy 92.23%
+10 ms delay - accuracy 96.31%
 15 ms delay - accuracy 89.9%
 20 ms delay - accuracy 85.4%
 

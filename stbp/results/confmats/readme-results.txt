@@ -25,3 +25,7 @@ weights are replicated for Conv layer 1 only
 
 weights are replicated to C1 and C2
 10 ms delay - accuracy 81.1%
+
+
+Todo:
+Different delays for 2 conv layers
